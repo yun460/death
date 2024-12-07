@@ -33,16 +33,24 @@ class Block(Basic):
     def draw(self, surface) -> None:
         pygame.draw.rect(surface, self.color, self.rect)
     
-    def collide(self,blocks):
+    def collide(self,blocks=None):
         # ============================================
         # TODO: Implement an event when block collides with a ball
-        #블록이 공과 충돌했을 때 호출됩니다.
-    #- self.alive를 False로 설정합니다.
-    #- 해당 블록을 blocks 리스트에서 제거합니다.
+        # 블록이 공과 충돌했을 때 호출됩니다.
+        # self.alive를 False로 설정합니다.
+        # 해당 블록을 blocks 리스트에서 제거합니다.
     
         self.alive = False
         if self in blocks:  # 리스트에서 블록 제거
             blocks.remove(self)
+
+        # 20% 확률로 아이템 생성
+        # 아이템 생성 (전역 ITEMS 리스트를 참조하기 위해 import)
+        if random.random() < 0.2:
+            from __main__ import ITEMS  # 동적 import로 순환 참조 방지
+            item_color = random.choice(config.item_colors)
+            item = Item(item_color, self.rect.center)
+            ITEMS.append(item)
         
 
 class Paddle(Basic):
@@ -78,7 +86,6 @@ class Ball(Basic):
             if self.rect.colliderect(block.rect) and block.alive:
                 # 블록의 collide() 호출하여 처리
                 block.collide(blocks)
-                block.alive = False
 
                 # 충돌 방향 계산
                 if (
@@ -122,3 +129,16 @@ class Ball(Basic):
         if self.rect.top > config.display_dimension[1]:
             return False  # 공이 화면 아래로 떨어졌다면 False 반환
         return True  
+    
+
+class Item(Basic):
+    def __init__(self, color: tuple, pos: tuple):
+        super().__init__(color, config.item_speed, pos, config.item_size)
+        self.color = color
+    
+    def draw(self, surface):
+        pygame.draw.ellipse(surface, self.color, self.rect)
+
+    def move(self):
+        # 아이템은 아래로 떨어지기 때문에 y 방향으로만 이동
+        self.rect.move_ip(0, self.speed)
