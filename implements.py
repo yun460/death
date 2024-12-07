@@ -46,7 +46,7 @@ class Block(Basic):
 
         # 20% 확률로 아이템 생성
         # 아이템 생성 (전역 ITEMS 리스트를 참조하기 위해 import)
-        if random.random() < 0.5:
+        if random.random() < 0.2:
             from __main__ import ITEMS  # 동적 import로 순환 참조 방지
             item_color = random.choice(config.item_colors)
             item = Item(item_color, self.rect.center)
