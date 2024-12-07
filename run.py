@@ -69,6 +69,18 @@ def tick():
         if ball.alive() == False:
             BALLS.remove(ball)
 
+    # 아이템 이동 및 충돌 처리
+    for item in ITEMS[:]:  # 복사본으로 순회하여 안전하게 리스트 수정
+        item.move()
+        if item.rect.colliderect(paddle.rect):
+            if item.color == config.item_colors[0]:  # 빨간색 아이템: 공 추가
+                pass
+            elif item.color == config.item_colors[1]:  # 파란색 아이템: 공 복제
+                pass
+            
+            # 아이템 제거
+            ITEMS.remove(item)
+
 
 def main():
     global life
@@ -116,6 +128,9 @@ def main():
                 ball.draw(surface)
             for block in BLOCKS:
                 block.draw(surface)
+            # 아이템 화면에 그리기
+            for item in ITEMS:
+                item.draw(surface)
 
         pygame.display.update()
         fps_clock.tick(config.fps)

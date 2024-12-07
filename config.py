@@ -38,7 +38,9 @@ ball_size = (20, 20)
 
 
 # Setting for items
+item_speed = 5
 item_size = (20, 20)
+item_colors = [(255, 0, 0), (0, 0, 255)] # 빨간색, 파란색
 one_more_prob = 0.3
 fever_prob = 0.1
 add_score_prob = 0.1
